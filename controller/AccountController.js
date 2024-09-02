@@ -20,7 +20,7 @@ export async function getAccountDetails(req, res) {
       if (amount <= 0) {
         return res.status(400).json({ message: 'Invalid deposit amount' });
       }
-      const account = await Account.findOne({ AccountId: req.params.AccountId });
+      const account = await Account.findOne({ AccountId: AccountId });
       if (!account) {
         return res.status(404).json({ message: 'Account not found' });
       }
@@ -40,7 +40,7 @@ export async function getAccountDetails(req, res) {
       if (amount <= 0) {
         return res.status(400).json({ message: 'Invalid withdrawal amount' });
       }
-      const account = await Account.find(AccountId);
+      const account = await Account.findOne({AccountId:AccountId});
       if (!account) {
         return res.status(404).json({ message: 'Account not found' });
       }
@@ -59,14 +59,14 @@ export async function getAccountDetails(req, res) {
   export async function deleteAccount(req, res) {
     try {
       const { AccountId } = req.params;
-      const account = await Account.findById(AccountId);
+      const account = await Account.findOne({AccountId:AccountId});
       if (!account) {
         return res.status(404).json({ message: 'Account not found' });
       }
       if (account.balance !== 0) {
         return res.status(400).json({ message: 'Account cannot be deleted with a non-zero balance' });
       }
-      await account.remove();
+      await account.deleteOne();
       res.json({ message: 'Account deleted successfully' });
     } catch (error) {
       res.status(400).json({ message: error.message });
